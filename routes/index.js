@@ -13,7 +13,7 @@ router.param('quizId', quizController.load) // autoload :quizId
 
 // GET /author
 router.get('/author', function(req, res) {
-    res.render('author');
+    res.render('author', {title: 'Quiz - Créditos', errors: [] });
 });
 
 // Definición de rutas de /quizes
