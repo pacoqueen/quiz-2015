@@ -24,7 +24,7 @@ var sequelize = new Sequelize(DB_name, user, pwd,
                                host: host,
                                storage: storage, // solo SQLite (.env)
                                omitNull: true    // solo Postgres
-    }
+    			      }
     );
 
 // Importar la definición de la tabla Quiz en quiz.js
