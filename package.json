@@ -6,8 +6,11 @@
     "start": "node ./bin/www"
   },
   "engines": {
-      "node": "0.10.x",
-      "npm": "1.4.x"
+    "node": "0.10.x",
+    "npm": "1.4.x"
+  },
+  "devDependencies": {
+    "sqlite3": "3.0.4"
   },
   "dependencies": {
     "body-parser": "~1.13.1",
@@ -17,6 +20,8 @@
     "express": "~4.13.0",
     "express-partials": "^0.3.0",
     "morgan": "~1.6.1",
+    "pg": "^4.1.1",
+    "pg-hstore": "^2.3.2",
     "serve-favicon": "~2.3.0"
   }
 }
