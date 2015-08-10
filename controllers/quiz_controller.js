@@ -2,7 +2,10 @@ var models = require('../models/models.js');
 
 // Autoload - factoriza el código si ruta incluye :quizId
 exports.load = function(req, res, next, quizId){
-    models.Quiz.find(quizId).then(
+    models.Quiz.find({where: {id: Number(quizId)},
+                      include: [{model: models.Comment}]
+                     }
+        ).then(
         function(quiz){
             if (quiz){
                 req.quiz = quiz;
@@ -23,7 +26,7 @@ exports.index = function(req, res){
                 res.render('quizes/index.ejs', {quizes: quizes, errors: []});
             }
         );
-    }else{ 	// No búsqueda, mostramos todas.
+    }else{     // No búsqueda, mostramos todas.
         models.Quiz.findAll().then(function(quizes){
             res.render('quizes/index.ejs', {quizes: quizes, errors: []});
         });
@@ -34,7 +37,7 @@ exports.index = function(req, res){
 exports.show = function(req, res) {
     models.Quiz.find(req.params.quizId).then(function(quiz) {
         res.render('quizes/show', {quiz: req.quiz, errors: []});
-    })
+    });
 };
 
 // GET /quizes/:id/answer
@@ -66,7 +69,7 @@ exports.create = function(req, res){
             // guarda en la BD los campos pregunta y respuesta de quiz
             quiz.save({fields: ["tema", "pregunta", "respuesta"]}).then(function(){
                 res.redirect('/quizes');
-            })  // Redirección HTTP (URL relativo) a lista de preguntas
+            });  // Redirección HTTP (URL relativo) a lista de preguntas
         }
     });
 };
@@ -101,5 +104,5 @@ exports.update = function(req, res){
 exports.destroy = function(req, res){
     req.quiz.destroy().then(function(){
         res.redirect('/quizes');
-    }).catch(function(error){next(error)});
+    }).catch(function(error){next(error);});
 };

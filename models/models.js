@@ -24,12 +24,21 @@ var sequelize = new Sequelize(DB_name, user, pwd,
                                host: host,
                                storage: storage, // solo SQLite (.env)
                                omitNull: true    // solo Postgres
-    			      }
+                      }
     );
 
 // Importar la definición de la tabla Quiz en quiz.js
 var Quiz = sequelize.import(path.join(__dirname, 'quiz'));
+
+// Importar definición de la tabla Comment
+var comment_path = path.join(__dirname, 'comment');
+var Comment = sequelize.import(comment_path);
+
+Comment.belongsTo(Quiz);
+Quiz.hasMany(Comment);
+
 exports.Quiz = Quiz;  // Exportar definición de la tabla Quiz
+exports.Comment = Comment;
 
 // sequelize.sync()     // crea e inicializa tabla de preguntas en BD
 sequelize.sync().then(function() {
@@ -44,7 +53,8 @@ sequelize.sync().then(function() {
                    respuesta: 'Lisboa',
                    tema: 'humanidades'
                   })
-       .then(function(){console.log('Base de datos inicializada.')});
-      };
+       .then(function(){console.log('Base de datos inicializada.');
+                       });
+      }
     });
   });
