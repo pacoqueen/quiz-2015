@@ -37,7 +37,27 @@ app.use(function(req, res, next){
     }
     // Hacer visible req.session en las vistas
     res.locals.session = req.session;
-    next();
+
+
+    // Compruebo auto-logout
+    if (req.session.user){ // Si hay usuario con sesión iniciada
+        var timestamp = new Date().getTime();
+        var tiempo_inactividad = timestamp - req.session.last_timestamp;
+        if (tiempo_inactividad > 2 * 60 * 1000){
+            // auto-logout si más de 2 minutos
+            req.session.session_expired = true;
+            // console.log("  ===================> Sesión expirada. <-------");
+            delete req.session.user;
+            req.session.errors = [{"message": "Sesión expirada."}];
+            res.redirect("/login");
+        }else{
+            req.session.last_timestamp = timestamp;
+            req.session.session_expired = false;
+            next();
+        }
+    }else{
+        next();
+    }
 });
 
 app.use('/', routes);
